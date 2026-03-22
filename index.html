@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess Class Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Realtime planning</p>
+          <h1>Chess Class Planner</h1>
+          <p class="sidebar-copy">
+            Manage student schedules, see the next 12 weeks on your coaching calendar, and reschedule individual classes with timezone-safe timing.
+          </p>
+        </div>
+
+        <div class="coach-card">
+          <p class="label">Coach timezone</p>
+          <select id="coach-timezone"></select>
+          <p class="hint">Defaulted to India Standard Time (Asia/Kolkata).</p>
+        </div>
+
+        <div class="stats-grid" id="stats-grid"></div>
+      </aside>
+
+      <main class="content">
+        <section class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Student setup</p>
+              <h2>Register a chess student</h2>
+            </div>
+          </div>
+
+          <form id="student-form">
+            <div class="form-grid">
+              <label>
+                Student name
+                <input type="text" name="name" placeholder="Bhomik" required />
+              </label>
+              <label>
+                Age
+                <input type="number" name="age" min="3" max="99" placeholder="7" required />
+              </label>
+              <label>
+                Country
+                <input type="text" name="country" placeholder="UAE" required />
+              </label>
+              <label>
+                Student timezone
+                <select name="timezone" id="student-timezone" required></select>
+              </label>
+              <label>
+                Total classes
+                <input type="number" name="totalClasses" min="1" placeholder="24" required />
+              </label>
+              <label>
+                Classes per week
+                <select name="classesPerWeek" id="classes-per-week" required>
+                  <option value="1">1</option>
+                  <option value="2" selected>2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </label>
+              <label>
+                Schedule start date
+                <input type="date" name="startDate" required />
+              </label>
+            </div>
+
+            <div>
+              <div class="schedule-builder-header">
+                <div>
+                  <p class="eyebrow">Weekly slots</p>
+                  <h3>Enter the student's local day and time</h3>
+                </div>
+                <p class="hint">The app stores the student timezone and your timezone, then projects the next 12 weeks automatically.</p>
+              </div>
+              <div id="weekly-slots" class="weekly-slots"></div>
+            </div>
+
+            <button type="submit" class="primary-button">Save student and build calendar</button>
+          </form>
+        </section>
+
+        <section class="panel dashboard-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h2>Main dashboard</h2>
+            </div>
+          </div>
+          <div id="student-summary" class="student-summary empty-state">
+            Add your first student to see the calendar dashboard.
+          </div>
+        </section>
+
+        <section class="panel calendar-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Calendar view</p>
+              <h2>Upcoming classes</h2>
+            </div>
+          </div>
+          <div id="schedule-list" class="schedule-list empty-state">
+            No classes scheduled yet.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="reschedule-dialog">
+      <form method="dialog" id="reschedule-form" class="dialog-form">
+        <div class="dialog-header">
+          <h3>Reschedule class</h3>
+          <button type="button" class="ghost-button" id="close-reschedule">✕</button>
+        </div>
+        <input type="hidden" name="studentId" />
+        <input type="hidden" name="classId" />
+        <label>
+          New date
+          <input type="date" name="date" required />
+        </label>
+        <label>
+          New time
+          <input type="time" name="time" required />
+        </label>
+        <label>
+          Timezone used for this update
+          <select name="timezone" id="reschedule-timezone" required></select>
+        </label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-button" id="cancel-reschedule">Cancel</button>
+          <button type="submit" class="primary-button">Update class</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="slot-row-template">
+      <div class="slot-row">
+        <label>
+          Day
+          <select class="slot-day" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </label>
+        <label>
+          Time
+          <input class="slot-time" type="time" required />
+        </label>
+      </div>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
